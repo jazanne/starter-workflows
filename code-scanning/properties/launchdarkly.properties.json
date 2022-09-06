@@ -1,0 +1,7 @@
+{
+    "name": "LaunchDarkly Find Code References",
+    "organization": "LaunchDarkly",
+    "description": "Scan repository for references to your feature flags.",
+    "iconName": "osmo",
+    "categories": ["Code Scanning", "feature flags", "feature management"]
+}

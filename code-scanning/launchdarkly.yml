@@ -1,9 +1,19 @@
-on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
 
 name: Find LaunchDarkly flag code references
+
+on:
+  push:
+    branches: [ $default-branch, $protected-branches ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ $default-branch ]
+  schedule:
+    - cron: $cron-weekly
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -13,10 +23,12 @@ jobs:
     name: LaunchDarkly Code References
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
       with:
         fetch-depth: 11 # This value must be set to identify flag extinctions. Read more: https://github.com/launchdarkly/ld-find-code-refs#searching-for-unused-flags-extinctions
-    - name: LaunchDarkly Code References
+
+    - name: Find feature flag references
       uses: launchdarkly/find-code-references@v2
       with:
         accessToken: ${{ secrets.LD_ACCESS_TOKEN }}
